@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ejercicio práctico UML | Sistema de préstamo de libros</title>
+<style>
+:root{--navy:#12366b;--blue:#1769aa;--sky:#eaf5ff;--green:#1d7650;--ink:#243247;--muted:#627086;--line:#d8e3ef;--paper:#fff;--gold:#f2b84b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f3f7fb;color:var(--ink);line-height:1.6}
+header{background:linear-gradient(125deg,#10366b,#1679b8);color:white;padding:34px 20px 28px}
+.wrap{max-width:1080px;margin:auto;padding:0 20px}
+.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:.78rem;font-weight:700;opacity:.85}
+h1{font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.15;margin:8px 0 12px}
+header p{max-width:760px;margin:0;color:#e8f4ff;font-size:1.05rem}
+nav{position:sticky;top:0;z-index:5;background:white;border-bottom:1px solid var(--line);box-shadow:0 3px 12px #17395b0b}
+.navinner{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px}
+nav a{color:var(--navy);font-weight:700;text-decoration:none;padding:9px 13px;border-radius:9px;font-size:.92rem}
+nav a:hover{background:var(--sky)}
+main{max-width:1080px;margin:26px auto 60px;padding:0 20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px;margin:18px 0;box-shadow:0 6px 22px #16375b08}
+h2{color:var(--navy);margin:0 0 12px;font-size:1.5rem}
+h3{color:var(--blue);margin:18px 0 8px}
+.lead{font-size:1.04rem;color:#45546a}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}
+.pill{background:#e8f4ff;color:#14528b;border-radius:999px;padding:6px 11px;font-size:.84rem;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.step{border:1px solid var(--line);border-radius:12px;padding:17px;background:#fbfdff}
+.step .num{display:inline-grid;place-items:center;background:var(--blue);color:white;border-radius:50%;width:30px;height:30px;font-weight:bold;margin-bottom:8px}
+.step h3{margin:2px 0 6px}
+.callout{border-left:4px solid var(--gold);background:#fff8e8;padding:14px 17px;border-radius:0 10px 10px 0;margin:16px 0}
+.checklist{list-style:none;padding:0;margin:10px 0}
+.checklist li{padding:8px 0;border-bottom:1px solid #edf1f6}
+.checklist input{margin-right:9px;accent-color:var(--green);transform:scale(1.1)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.94rem}
+th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:#eaf4ff;color:var(--navy)}
+.diagram{background:#f9fcff;border:1px dashed #9db9d6;border-radius:12px;padding:16px;overflow-x:auto}
+.actor-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:10px 0}
+.actor{border:2px solid #5a91c7;background:#e8f5ff;border-radius:10px;padding:10px 15px;font-weight:700;text-align:center;min-width:130px}
+.usecases{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:14px 0}
+.oval{border:2px solid #64a6d9;border-radius:50%;background:#e8f7ff;padding:10px 17px;text-align:center;min-width:155px}
+.classrow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.classbox{min-width:190px;border:2px solid #4e8ac4;border-radius:8px;overflow:hidden;background:white}
+.classbox strong{display:block;background:#dceeff;text-align:center;padding:8px;border-bottom:2px solid #4e8ac4}
+.classbox div{padding:8px 11px;font-size:.9rem}
+.classbox div+div{border-top:1px solid #cbd9e8}
+.flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;justify-content:center}
+.flow span{display:flex;align-items:center;background:#eaf5ff;border:1px solid #8cb8df;border-radius:9px;padding:12px;font-weight:700;text-align:center}
+.flow b{display:flex;align-items:center;color:var(--blue);font-size:1.3rem}
+textarea{width:100%;min-height:95px;padding:12px;border:1px solid #bdccdc;border-radius:10px;font:inherit;resize:vertical}
+.btn{border:0;background:var(--blue);color:white;padding:11px 16px;border-radius:9px;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--navy)}
+.small{font-size:.9rem;color:var(--muted)}
+footer{text-align:center;color:var(--muted);padding:24px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.card{padding:18px}.navinner{gap:3px}nav a{padding:8px;font-size:.82rem}table{font-size:.85rem}}
+@media print{nav,.btn{display:none}body{background:white}.card{box-shadow:none;break-inside:avoid}header{background:#12366b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap">
+  <div class="eyebrow">Actividad para realizar en clase · Lucidchart</div>
+  <h1>Ejercicio práctico de diagramas UML</h1>
+  <p><strong>Situación:</strong> diseñar el modelado de un sistema de préstamo de libros para una biblioteca. El objetivo es construir tres diagramas relacionados: casos de uso, clases y secuencia.</p>
+  <div class="pills"><span class="pill">Trabajo en equipo</span><span class="pill">3 diagramas</span><span class="pill">Herramienta: Lucidchart</span></div>
+ </div>
+</header>
+<nav><div class="wrap navinner">
+ <a href="#reto">El reto</a><a href="#casos">1. Casos de uso</a><a href="#clases">2. Clases</a><a href="#secuencia">3. Secuencia</a><a href="#entrega">Entrega</a>
+</div></nav>
+<main>
+<section class="card" id="reto">
+ <h2>¿Qué deben realizar?</h2>
+ <p class="lead">Una biblioteca necesita organizar el préstamo de libros. Los usuarios podrán buscar libros y solicitar préstamos. El bibliotecario podrá registrar libros y gestionar los préstamos. El sistema debe comprobar si el libro está disponible y registrar la fecha del préstamo y la fecha de devolución.</p>
+ <div class="grid">
+  <div class="step"><span class="num">1</span><h3>Analizar</h3><p>Lean el caso, identifiquen quiénes participan y qué información necesita administrar la biblioteca.</p></div>
+  <div class="step"><span class="num">2</span><h3>Modelar</h3><p>Construyan los tres diagramas en Lucidchart. Cada diagrama debe representar una parte del mismo sistema.</p></div>
+  <div class="step"><span class="num">3</span><h3>Revisar</h3><p>Comprueben que los actores, las clases y los mensajes sean coherentes entre los tres diagramas.</p></div>
+ </div>
+ <div class="callout"><strong>Importante:</strong> no se requiere programar el sistema. La actividad consiste en representar visualmente cómo funcionaría y cómo estaría organizado.</div>
+ <h3>Requisitos del sistema</h3>
+ <ul>
+  <li>Un usuario puede buscar un libro por título.</li>
+  <li>Un usuario puede solicitar el préstamo de un libro disponible.</li>
+  <li>El sistema registra el préstamo y las fechas correspondientes.</li>
+  <li>El bibliotecario puede registrar libros y consultar los préstamos.</li>
+  <li>Si un libro no está disponible, el sistema informa al usuario.</li>
+ </ul>
+</section>
+
+<section class="card" id="casos">
+ <h2>1. Actividad: diagrama de casos de uso</h2>
+ <p>Representen las funciones que ofrece el sistema y los actores que las utilizan. Dibujen el límite del sistema como un rectángulo, los casos de uso como óvalos y conecten cada actor con las funciones que puede realizar.</p>
+ <h3>Elementos que deben incluir</h3>
+ <table><thead><tr><th>Elemento</th><th>Qué deben representar</th></tr></thead><tbody>
+ <tr><td><strong>Actor 1: Usuario</strong></td><td>Persona que busca libros y solicita préstamos.</td></tr>
+ <tr><td><strong>Actor 2: Bibliotecario</strong></td><td>Persona que registra libros y consulta o gestiona préstamos.</td></tr>
+ <tr><td><strong>Casos de uso</strong></td><td>Buscar libro, solicitar préstamo, verificar disponibilidad, registrar libro y consultar préstamos.</td></tr>
+ <tr><td><strong>Límite del sistema</strong></td><td>Un rectángulo con el nombre “Sistema de préstamo de libros”.</td></tr>
+ </tbody></table>
+ <h3>Referencia visual simplificada</h3>
+ <div class="diagram">
+  <div class="actor-row"><div class="actor">Usuario</div><div class="actor">Bibliotecario</div></div>
+  <div class="usecases"><div class="oval">Buscar libro</div><div class="oval">Solicitar préstamo</div><div class="oval">Verificar disponibilidad</div><div class="oval">Registrar libro</div><div class="oval">Consultar préstamos</div></div>
+  <p class="small" style="text-align:center">En Lucidchart, dibujen el rectángulo del sistema y coloquen dentro los óvalos. Los actores quedan fuera del límite y se conectan con las funciones correspondientes.</p>
+ </div>
+ <h3>Pasos en Lucidchart</h3>
+ <ol><li>Crear un documento nuevo y elegir una plantilla UML de casos de uso o usar formas básicas.</li><li>Colocar los dos actores fuera del rectángulo del sistema.</li><li>Agregar los cinco casos de uso dentro del rectángulo.</li><li>Conectar cada actor con las funciones que utiliza.</li><li>Guardar el diagrama con el nombre <em>01_Casos_de_Uso</em>.</li></ol>
+ <label for="resp1"><strong>Antes de avanzar, anoten:</strong> ¿qué funciones corresponden al usuario y cuáles al bibliotecario?</label>
+ <textarea id="resp1" placeholder="Escriban aquí sus ideas..."></textarea>
+</section>
+
+<section class="card" id="clases">
+ <h2>2. Actividad: diagrama de clases</h2>
+ <p>Ahora representen la estructura del sistema. Una clase describe un tipo de objeto, sus atributos (datos) y sus métodos (acciones). Incluyan las clases sugeridas y conecten las que se relacionan.</p>
+ <h3>Clases sugeridas</h3>
+ <div class="diagram">
+  <div class="classrow">
+   <div class="classbox"><strong>Usuario</strong><div>− id: int<br>− nombre: string<br>− correo: string</div><div>+ buscarLibro()<br>+ solicitarPrestamo()</div></div>
+   <div class="classbox"><strong>Libro</strong><div>− isbn: string<br>− titulo: string<br>− disponible: boolean</div><div>+ consultarDisponibilidad()<br>+ actualizarEstado()</div></div>
+   <div class="classbox"><strong>Prestamo</strong><div>− id: int<br>− fechaPrestamo: date<br>− fechaDevolucion: date<br>− estado: string</div><div>+ registrar()<br>+ cerrarPrestamo()</div></div>
+   <div class="classbox"><strong>Bibliotecario</strong><div>− id: int<br>− nombre: string</div><div>+ registrarLibro()<br>+ consultarPrestamos()</div></div>
+  </div>
+  <p class="small" style="text-align:center">Estas clases son una propuesta inicial. Dibujen las relaciones entre ellas y añadan multiplicidades si su docente las solicita.</p>
+ </div>
+ <h3>Pasos en Lucidchart</h3>
+ <ol><li>Crear un diagrama UML de clases.</li><li>Para cada clase, crear un rectángulo dividido en nombre, atributos y métodos.</li><li>Relacionar Usuario con Prestamo y Prestamo con Libro.</li><li>Relacionar Bibliotecario con las tareas de gestión que realiza; pueden modelar esta relación según su criterio y justificarla.</li><li>Guardar el diagrama con el nombre <em>02_Diagrama_de_Clases</em>.</li></ol>
+ <div class="callout"><strong>Para pensar:</strong> ¿por qué conviene que la información del préstamo esté en una clase propia y no únicamente dentro de Usuario o Libro?</div>
+ <label for="resp2"><strong>Escriban su explicación:</strong></label>
+ <textarea id="resp2" placeholder="Expliquen qué datos guarda la clase Préstamo y por qué..."></textarea>
+</section>
+
+<section class="card" id="secuencia">
+ <h2>3. Actividad: diagrama de secuencia</h2>
+ <p>Representen, en orden temporal, qué sucede cuando un usuario solicita un préstamo. Incluyan las líneas de vida de Usuario, Interfaz, Sistema de biblioteca y Base de datos, y conecten los participantes con mensajes.</p>
+ <h3>Secuencia que deben modelar</h3>
+ <div class="diagram">
+  <div class="flow">
+   <span>Usuario</span><b>→</b><span>Interfaz</span><b>→</b><span>Sistema</span><b>→</b><span>Base de datos</span>
+  </div>
+  <ol>
+   <li>El usuario selecciona un libro y solicita el préstamo.</li>
+   <li>La interfaz envía la solicitud al sistema.</li>
+   <li>El sistema consulta en la base de datos la disponibilidad del libro.</li>
+   <li>La base de datos devuelve el estado del libro.</li>
+   <li><strong>Si está disponible:</strong> el sistema registra el préstamo, actualiza el estado del libro y envía una confirmación.</li>
+   <li><strong>Si no está disponible:</strong> el sistema informa que el libro no puede prestarse en ese momento.</li>
+  </ol>
+ </div>
+ <h3>Pasos en Lucidchart</h3>
+ <ol><li>Crear un diagrama de secuencia UML.</li><li>Colocar los cuatro participantes en la parte superior y trazar sus líneas de vida verticales.</li><li>Agregar mensajes horizontales en el orden indicado.</li><li>Usar mensajes de retorno para mostrar la respuesta de la base de datos o del sistema.</li><li>Representar la decisión de disponibilidad con un fragmento combinado <strong>alt</strong> y dos condiciones: [disponible] y [no disponible].</li><li>Guardar el diagrama con el nombre <em>03_Diagrama_de_Secuencia</em>.</li></ol>
+ <label for="resp3"><strong>Pregunta de análisis:</strong> ¿qué mensaje cambia cuando el libro no está disponible?</label>
+ <textarea id="resp3" placeholder="Describan la diferencia entre los dos escenarios..."></textarea>
+</section>
+
+<section class="card" id="entrega">
+ <h2>Entrega del trabajo</h2>
+ <p>Al finalizar, cada equipo debe contar con los tres diagramas creados en Lucidchart y revisar que representen el mismo sistema de préstamo de libros.</p>
+ <ul class="checklist">
+  <li><label><input type="checkbox"> Diagrama de casos de uso con actores, funciones y límite del sistema.</label></li>
+  <li><label><input type="checkbox"> Diagrama de clases con nombres, atributos, métodos y relaciones.</label></li>
+  <li><label><input type="checkbox"> Diagrama de secuencia con participantes, mensajes y respuesta según disponibilidad.</label></li>
+  <li><label><input type="checkbox"> Los tres diagramas tienen nombres claros y se guardaron en Lucidchart.</label></li>
+  <li><label><input type="checkbox"> El equipo puede explicar brevemente qué representa cada diagrama.</label></li>
+ </ul>
+ <h3>Reflexión final</h3>
+ <p>Respondan en equipo: ¿cómo se complementan los tres diagramas para explicar el mismo sistema?</p>
+ <textarea id="reflexion" placeholder="Escriban una breve conclusión del equipo..."></textarea>
+ <p class="small">Consejo: usen el botón “Imprimir / Guardar como PDF” para conservar una copia de las instrucciones de la actividad. Las respuestas escritas en esta página son temporales y pueden no conservarse al cerrar o actualizar el navegador.</p>
+ <button class="btn" onclick="window.print()">Imprimir / Guardar como PDF</button>
+</section>
+</main>
+<footer>Actividad práctica de modelado UML · Sistema de préstamo de libros · Lucidchart</footer>
+</body>
+</html>
